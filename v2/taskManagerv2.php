@@ -19,41 +19,8 @@ function bbddAction() {
     } else {
         return $connection;
     }
-}
 
-function setOption(){
-    $line = readline("Option: ");
-    $line = intval($line);
-    if (gettype($line) != "integer" or $line === 0)  {
-        echo "\n\nError : Invalid option (only numbers)\n";
-        echo "\nTry again\n";
-        
-    } else {
-        switch($line) {
-            case 1:
-                addTask();
-                break;
-            case 2:
-                showTasks();
-                break;
-            case 3:
-                finishTask();
-                break;
-            case 4:
-                deleteTask();
-                break;
-            case 5:
-                //Close the BBDD connection
-                bbddAction()->close();
-                exit;
-                break;
-            default:
-                echo "\n\nError : Invalid option\n";
-                echo "\nTry again\n";
-                
-                break;
-        }
-    }
+    $connection.close();
 }
 
 function taskExist($id) {
@@ -117,9 +84,8 @@ function showTasks() {
 	}
 }
 
-function finishTask() {
-    $taskToFinish = readline("Task to finish (ID) : ");
-
+function finishTask($id) {
+    $taskToFinish = $id;
     if (taskExist($taskToFinish)) {
         $sql = "UPDATE tasks SET status='Finished' WHERE id=$taskToFinish";
 
@@ -134,9 +100,8 @@ function finishTask() {
     }
 }
 
-function deleteTask() {
-
-    $taskToDelete = readline("Task to delete (ID) : ");
+function deleteTask($id) {
+    $taskToDelete = $id;
 
     if (taskExist($taskToDelete)) {
         $sql = "DELETE FROM tasks WHERE id=$taskToDelete";
@@ -151,55 +116,28 @@ function deleteTask() {
         echo "\nError : Task not exist (id : $taskToDelete)";
     }
 }
-/*
-$options_available = ["c", "l", "f", "d", "create", "list", "finish", "delete"];
-$options = getopt('c:l::f:d:', ['create:', 'list::', 'finish:', 'delete:']);
 
+$options = getopt('c:l::f:d:n:r:', ['create:', 'list::', 'finish:', 'remove:', 'name:', 'description:']);
 
-$count_options=0;
-
-
-foreach ($options_available as $option) {
-    global $options, $count_options;
-    echo(var_dump($options));
-    echo $option,"\n";
-    foreach ($options as $option_selected) {
-        
-        if ($value == $selected_value) {
-            if (!empty($options["c"]) or !empty($options["create"])) {
-                $count_options = $count_options + 1;
-            } elseif(empty($options["l"]) or empty($options["list"])){
-                $count_options = $count_options + 1;
-            } elseif (!empty($options["f"]) or !empty($options["finish"])) {
-                $count_options = $count_options + 1;
-            } elseif (!empty($options["d"]) or !empty($options["delete"])) {
-                $count_options = $count_options + 1;
-            }
-        }
-        
-        echo "Opcion leída \n";
+if (empty($options)) {
+    showHelp();
+} else {
+    if ((array_key_exists('c', $options) and array_key_exists('d', $options))){
+        addTask($options["c"], $options["d"]);
+    } elseif ((array_key_exists('create', $options) and array_key_exists('description', $options))) {
+        addTask($options["create"], $options["description"]);
+    } elseif (array_key_exists('l', $options) or array_key_exists('list', $options)){
+        showTasks();
+    } elseif (array_key_exists('f', $options)) {
+        finishTask($options["f"]);
+    } elseif(array_key_exists('finish', $options)) {
+        finishTask($options["finish"]);
+    } elseif (array_key_exists('r', $options) or array_key_exists('remove', $options)) {
+        deleteTask($options["r"]);
+    } elseif(array_key_exists('remove', $options)) {
+        deleteTask($options["remove"]);
     }
 }
-
-
-echo "Hay ", $count_options, " opciones ingresadas";
-*/
-
-$options = getopt('f:h::');
-var_dump($options);
-
-
-if (!empty($options["c"]) or !empty($options["create"])) {
-    
-} elseif(empty($options["l"]) or empty($options["list"])){
-    #showTasks();
-} elseif (!empty($options["f"]) or !empty($options["finish"])) {
-    $count_options = $count_options + 1;
-} elseif (!empty($options["d"]) or !empty($options["delete"])) {
-    $count_options = $count_options + 1;
-}
-
-#showHelp();
 
 function showHelp() {
     echo "\n";
@@ -207,7 +145,7 @@ function showHelp() {
     echo "==================================\n";
     echo "\n";
     echo "-> To CREATE a new task:\n";
-    echo "        -c | --create [task name | string] && -d [string] | --description [task description | string]\n";
+    echo "        -c | --create [task name | string] && -d '[string]' | --description '[task description | string]'\n";
     echo "\n";
     echo "-> To LIST all the tasks:\n";
     echo "        -l | --list\n";
@@ -215,8 +153,8 @@ function showHelp() {
     echo "-> To FINISH an task:\n";
     echo "        -f | --finish [task ID / int]\n";
     echo "\n";
-    echo "-> To DELETE an task:\n";
-    echo "        -d | --delete [task ID / int]\n";
+    echo "-> To REMOVE an task:\n";
+    echo "        -r | --remove [task ID / int]\n";
 }
 
 ?>
