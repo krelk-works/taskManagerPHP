@@ -7,28 +7,63 @@ if (php_sapi_name() != "cli") {
     die("\nError: Only works on CLI environment\n");
 }
 
+// Verifiquem l'arxiu de configuració
+ensure_config_file();
+
 $options = getopt('c:l::f:d:n:r:', ['create:', 'list::', 'finish:', 'remove:', 'name:', 'description:']);
 
-if (empty($options)) {
-    if (!$config) {
-        echo "\nNo s'ha realitzat la configuració del programa";
-    }
-    //showHelp();
-} else {
+if (!$config) {
+    // Iniciem la configuració del nostre programa [ on enmmagatzenarem les nostres tasques ]
+    echo "\nFalta la configuració\n";
+    setup();
+    return;
+}
+
+if (empty($options) and $config) {
+    showHelp();
+} elseif (!empty($options) and $config) {
     if ((array_key_exists('c', $options) and array_key_exists('d', $options))){
-        addTask($options["c"], $options["d"]);
+        if ($config["storage-type"] == "mysql") {
+            addTask($options["c"], $options["d"]);
+        } elseif ($config["storage-type"] == "json") {
+
+        }
     } elseif ((array_key_exists('create', $options) and array_key_exists('description', $options))) {
-        addTask($options["create"], $options["description"]);
+        if ($config["storage-type"] == "mysql") {
+            addTask($options["create"], $options["description"]);
+        } elseif ($config["storage-type"] == "json") {
+
+        }
     } elseif (array_key_exists('l', $options) or array_key_exists('list', $options)){
-        showTasks();
+        if ($config["storage-type"] == "mysql") {
+            showTasks();
+        } elseif ($config["storage-type"] == "json") {
+
+        }
     } elseif (array_key_exists('f', $options)) {
-        finishTask($options["f"]);
+        if ($config["storage-type"] == "mysql") {
+            finishTask($options["f"]);
+        } elseif ($config["storage-type"] == "json") {
+
+        }
     } elseif(array_key_exists('finish', $options)) {
-        finishTask($options["finish"]);
+        if ($config["storage-type"] == "mysql") {
+            finishTask($options["finish"]);
+        } elseif ($config["storage-type"] == "json") {
+
+        }
     } elseif (array_key_exists('r', $options) or array_key_exists('remove', $options)) {
-        deleteTask($options["r"]);
+        if ($config["storage-type"] == "mysql") {
+            deleteTask($options["r"]);
+        } elseif ($config["storage-type"] == "json") {
+
+        }
     } elseif(array_key_exists('remove', $options)) {
-        deleteTask($options["remove"]);
+        if ($config["storage-type"] == "mysql") {
+            deleteTask($options["remove"]);
+        } elseif ($config["storage-type"] == "json") {
+
+        }
     }
 }
 
@@ -50,6 +85,3 @@ function showHelp() {
     echo "        -r | --remove [task ID / int]\n";
 }
 ?>
-
-
-

@@ -1,20 +1,10 @@
 <?php
-
-function check_connection($host, $user, $pass, $db) {
-    try {
-        $connection=new mysqli($host,$user,$pass,$db);
-        $connection->close();
-        return true;
-    } catch (Exception $e) {
-        return false;
-    }
-}
-
 function bbddAction() {
-    $host='localhost';
-    $user='root';
-    $pass='hola1234';
-    $db='taskManager';
+    global $config;
+    $host=$config["database"]["host"];
+    $user=$config["database"]["user"];
+    $pass=$config["database"]["password"];
+    $db=$config["database"]["db"];
 
     //Connection to BBDD
     $connection=new mysqli($host,$user,$pass,$db);

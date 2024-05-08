@@ -25,28 +25,29 @@ if ($os == "WIN") {
 $errors_data_file = "data".$DS."errors.yaml";
 $errors = false;
 $tasks_data_file = $user_directory.".config".$DS."task-manager.json";
-$config_file = "data".$DS."config.yaml";
+$config_file = $user_directory.".config".$DS."task-manager.yaml";
 $config = false;
 // ----------------------------------------
 
-if (file_exists($errors_data_file)) {
-    try {
-        // Fem una asignació de variable pasant l'arxiu de yaml per a poder-ho interpretar
-        $errors = Yaml::parseFile('data/errors.yaml');
-    } catch (Exception $e) {
-        // Agafem posibles errores que hi puguin apareixer i sortim del programa.
-        echo '\n[!] Error inesperat amb l`arxiu de errors: ',  $e->getMessage(), "\n";
-        die("[!] Programa finalitzat : error critic.");
-    }
-} else {
-    // Creem l'arxiu de errors encara que no tinguem res a dins
-    touch($errors_data_file);
-}
-
-function ensure_config_file(){
+function ensure_config_file() {
+    global $config_file;
+    global $config;
+    global $errors_data_file;
     if (file_exists($config_file)) {
         try {
-            $config = file_get_contents($config_file);
+            // Creem una variable temporal per a poder verificar que la configuració esta bé
+            $temporal_config = Yaml::parseFile($config_file);
+    
+            // Aprofitem i aqui mateix comprovem si les variables que hem agafat del config son valides en cas de ser del tipus MySQL
+            if (!empty($temporal_config["storage-type"])) {
+                if ($temporal_config["storage-type"] == "mysql") {
+                    if (empty($temporal_config["database"]["host"]) or empty($temporal_config["database"]["user"]) or empty($temporal_config["database"]["db"])){
+                        $config = false;
+                    } else {
+                        $config = $temporal_config;
+                    }
+                }
+            }
         } catch (Exception $e) {
             echo '\n[!] Error inesperat a l`arxiu de configuració: ',  $e->getMessage(), "\n";
             die("[!] Programa finalitzat : error critic.");
@@ -54,13 +55,17 @@ function ensure_config_file(){
     } else {
         // Creem l'arxiu en cas que no existeix
         touch($config_file);
-    
-        // Iniciem la configuració del nostre programa [ on enmmagatzenarem les nostres tasques ]
-        setup();
+    }
+
+    // Comprovem també que l'arxiu d'errors estigui creat
+    if (!file_exists($errors_data_file)) {
+        die("\nError critic : No s'ha pogut localitzar l'arxiu d'informació d'erros. Programa finalitzat\n");
     }
 }
 
+
 function ensure_json_file() {
+    global $tasks_data_file;
     if (!file_exists($tasks_data_file)) {
         // Creem l'arxiu en cas que no existeix per a desar dades
         touch($tasks_data_file);
