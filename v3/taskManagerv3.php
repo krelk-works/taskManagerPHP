@@ -1,7 +1,7 @@
 <?php
 
 include_once "sql_connection.php";
-include_once "config_checker.php";
+include_once "setup.php";
 
 if (php_sapi_name() != "cli") {
     die("\nError: Only works on CLI environment\n");

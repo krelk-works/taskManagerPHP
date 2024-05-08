@@ -1,5 +1,15 @@
 <?php
 
+function check_connection($host, $user, $pass, $db) {
+    try {
+        $connection=new mysqli($host,$user,$pass,$db);
+        $connection->close();
+        return true;
+    } catch (Exception $e) {
+        return false;
+    }
+}
+
 function bbddAction() {
     $host='localhost';
     $user='root';
@@ -15,8 +25,6 @@ function bbddAction() {
     } else {
         return $connection;
     }
-
-    $connection.close();
 }
 
 function taskExist($id) {
