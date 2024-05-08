@@ -11,7 +11,7 @@ $options = getopt('c:l::f:d:n:r:', ['create:', 'list::', 'finish:', 'remove:', '
 
 if (empty($options)) {
     if (!$config) {
-        echo "No s'ha realitzat la configuració del programa";
+        echo "\nNo s'ha realitzat la configuració del programa";
     }
     //showHelp();
 } else {
