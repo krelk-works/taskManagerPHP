@@ -1,50 +1,56 @@
 <?php
-function bbddAction() {
+function bbdd() {
     global $config;
-    $host=$config["database"]["host"];
-    $user=$config["database"]["user"];
-    $pass=$config["database"]["password"];
-    $db=$config["database"]["db"];
+    if ($config["storage-type"] == "mysql") {
+        $host=$config["database"]["host"];
+        $user=$config["database"]["user"];
+        $pass=$config["database"]["password"];
+        $db=$config["database"]["db"];
 
-    //Connection to BBDD
-    $connection=new mysqli($host,$user,$pass,$db);
+        //Connection to BBDD
+        $connection=new mysqli($host,$user,$pass,$db);
 
-    //Check connection
-    if ($connection->connect_error) {
-        die("\nFATAL ERROR : Connection failed: " . $connection->connect_error);
+        //Check connection
+        if ($connection->connect_error) {
+            $connection->close();
+            die("\nFATAL ERROR : Connection failed: " . $connection->connect_error);
+        } else {
+            return $connection;
+        }
     } else {
-        return $connection;
+        die("\nNo es pot utilitzar MySQL si no hi ha una configuració previament.\n");
     }
 }
 
 function taskExist($id) {
-    $query=bbddAction()->query("SELECT id FROM tasks WHERE id = '$id' LIMIT 1");
-    
+    $con = bbdd();
+    $query=$con->query("SELECT id FROM tasks WHERE id = '$id' LIMIT 1");
+    $con->close();
     if ($query->num_rows > 0) {
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 function addTask($taskName, $taskDescription) {
+    $con = bbdd();
     echo "\n";
 
     if (strlen($taskName) > 30) {
-        echo "\nError: Task name is too long : Maximum is 30 characters\n";
+        echo "\nError: Nom de la tasca massa llarg : Maxim 30 caracters\n";
         addTask();
     } else if ($taskName == "c") {
         echo "\n\n";
-        
         return;
     }
 
     if (empty($taskName)) {
-        echo "\nError: Task name can't be empty\n";
+        echo "\nError: El nom no pot estar buit\n";
         addTask();
     }
 
     if (strlen($taskDescription) > 150) {
-        echo "\nError: Task description is too long : Maximum is 150 characters\n";
+        echo "\nError: Descripció massa llarga : Maxim 150 caracters\n";
         addTask();
     } else if ($taskDescription == "c") {
         echo "\n\n";
@@ -52,21 +58,25 @@ function addTask($taskName, $taskDescription) {
     }
 
     if (empty($taskDescription)) {
-        echo "\nError: Task description can't be empty\n";
+        echo "\nError: La descripció no pot estar buida\n";
         addTask();
     }
 
     $insert_query = "INSERT INTO tasks (name, description) VALUES ('$taskName', '$taskDescription')";
 
-    if (bbddAction()->query($insert_query) === TRUE) {
-        echo "\nNew task added: $taskName";
+    if ($con->query($insert_query) === true) {
+        echo "\n[OK] Nova tasca afegida: $taskName\n";
     } else {
-        echo "\nError: " . $sql . " - ". $conn->error;
+        echo "[!] Hi ha hagut un error al fer l'intent de crear una nova tasca";
     }
+
+    // Tanquem la conexió amb la base de dades
+    $con->close();
 }
 
 function showTasks() {
-    $search = bbddAction()->query('SELECT * FROM tasks');
+    $con = bbdd();
+    $search = $con->query('SELECT * FROM tasks');
     echo "========= - TASKS LIST - =========\n\n";
 	while($task=$search->fetch_assoc()){
 	    echo "\n";
@@ -76,38 +86,36 @@ function showTasks() {
         echo "Status: ",$task["status"],"\n";
 	    echo "====================================\n\n";
 	}
+    $con->close();
 }
 
 function finishTask($id) {
-    $taskToFinish = $id;
-    if (taskExist($taskToFinish)) {
-        $sql = "UPDATE tasks SET status='Finished' WHERE id=$taskToFinish";
-
-        if (bbddAction()->query($sql) === TRUE) {
-            echo "\nTask with ID $taskToFinish was update to Finished.";
+    $con=bbdd();
+    if (taskExist($id)) {
+        $sql = "UPDATE tasks SET status='Finished' WHERE id=$id";
+        if ($con->query($sql) === true) {
+            echo "\nLa tasca amb ID $id ha sigut Finalitzada.";
         } else {
-            echo "\nError updating record: " . $conn->error;
+            echo "\nHi ha hagut un error a l'intentar Finalitzar la tasca.";
         }
-
     } else {
-        echo "\nError : Task not exist (id : $taskToFinish)";
+        echo "\nError : La tasca no existeix (id : $id)";
     }
+    $con->close();
 }
 
 function deleteTask($id) {
-    $taskToDelete = $id;
-
-    if (taskExist($taskToDelete)) {
-        $sql = "DELETE FROM tasks WHERE id=$taskToDelete";
-
-        if (bbddAction()->query($sql) === TRUE) {
-            echo "\nTask with ID $taskToDelete was deleted.";
+    $con=bbdd();
+    if (taskExist($id)) {
+        $sql = "DELETE FROM tasks WHERE id=$id";
+        if ($con->query($sql) === true) {
+            echo "\nLa tasca amb ID $id ha sigut eliminada.";
         } else {
-            echo "\nError updating record: " . $conn->error;
+            echo "\nError a l'intentar esborrar la tasca";
         }
-
     } else {
-        echo "\nError : Task not exist (id : $taskToDelete)";
+        echo "\nError : La tasca no existeix (id : $id)";
     }
+    $con->close();
 }
 ?>

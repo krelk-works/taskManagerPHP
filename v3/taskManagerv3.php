@@ -69,7 +69,7 @@ if (empty($options) and $config) {
 
 function showHelp() {
     echo "\n";
-    echo "ERROR : taskManager - Syntax error\n";
+    echo "taskManager : Syntax error\n";
     echo "==================================\n";
     echo "\n";
     echo "-> To CREATE a new task:\n";
