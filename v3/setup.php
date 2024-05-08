@@ -20,7 +20,7 @@ function setup() {
     // Comprovem l'opció inserida per l'usuari
     if ($option != "1" and $option != "2" and $option != "3") {
         //Salt de linia amb missatge d'error
-        echo "\n", $errors['invalid_save_option'];
+        //echo "\n", $errors['invalid_save_option'];
     } else {
         switch($option){
             case "1":
@@ -56,10 +56,25 @@ function setup() {
                 }
                 break;
             case "2":
+                global $config_file;
+                // Declarem un diccionari de dades
+                $new_config = [];
+
+                // Li asignem el tipus de enmmagatzematge
+                $new_config["storage-type"] = "json";
+
+                //Transormem el diccionari a YAML
+                $new_config = Yaml::dump($new_config);
+
+                // Creem l'arxiu json
                 ensure_json_file();
+
+                // Desem el diccionari en format YAML a l'arxiu de configuració
+                file_put_contents($config_file, $new_config);
+                echo "\n[OK] Configuració desada amb exit.\n";
                 break;
             default:
-                echo "Adiooooosss.";
+                echo "Programa finalitzat";
                 break;
         }
     }

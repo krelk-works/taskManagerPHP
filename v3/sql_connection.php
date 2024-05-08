@@ -37,7 +37,7 @@ function addTask($taskName, $taskDescription) {
     echo "\n";
 
     if (strlen($taskName) > 30) {
-        echo "\nError: Nom de la tasca massa llarg : Maxim 30 caracters\n";
+        echo "Error: Nom de la tasca massa llarg : Maxim 30 caracters\n";
         addTask();
     } else if ($taskName == "c") {
         echo "\n\n";
@@ -45,12 +45,12 @@ function addTask($taskName, $taskDescription) {
     }
 
     if (empty($taskName)) {
-        echo "\nError: El nom no pot estar buit\n";
+        echo "Error: El nom no pot estar buit\n";
         addTask();
     }
 
     if (strlen($taskDescription) > 150) {
-        echo "\nError: Descripció massa llarga : Maxim 150 caracters\n";
+        echo "Error: Descripció massa llarga : Maxim 150 caracters\n";
         addTask();
     } else if ($taskDescription == "c") {
         echo "\n\n";
@@ -58,16 +58,16 @@ function addTask($taskName, $taskDescription) {
     }
 
     if (empty($taskDescription)) {
-        echo "\nError: La descripció no pot estar buida\n";
+        echo "Error: La descripció no pot estar buida\n";
         addTask();
     }
 
     $insert_query = "INSERT INTO tasks (name, description) VALUES ('$taskName', '$taskDescription')";
 
     if ($con->query($insert_query) === true) {
-        echo "\n[OK] Nova tasca afegida: $taskName\n";
+        echo "[OK] Nova tasca afegida: $taskName\n";
     } else {
-        echo "[!] Hi ha hagut un error al fer l'intent de crear una nova tasca";
+        echo "[!] Hi ha hagut un error al fer l'intent de crear una nova tasca\n";
     }
 
     // Tanquem la conexió amb la base de dades
@@ -94,12 +94,12 @@ function finishTask($id) {
     if (taskExist($id)) {
         $sql = "UPDATE tasks SET status='Finished' WHERE id=$id";
         if ($con->query($sql) === true) {
-            echo "\nLa tasca amb ID $id ha sigut Finalitzada.";
+            echo "[OK] La tasca amb ID $id ha sigut Finalitzada.\n";
         } else {
-            echo "\nHi ha hagut un error a l'intentar Finalitzar la tasca.";
+            echo "[!] Hi ha hagut un error a l'intentar Finalitzar la tasca.\n";
         }
     } else {
-        echo "\nError : La tasca no existeix (id : $id)";
+        echo "[!] La tasca no existeix (ID : $id)\n";
     }
     $con->close();
 }
@@ -109,12 +109,12 @@ function deleteTask($id) {
     if (taskExist($id)) {
         $sql = "DELETE FROM tasks WHERE id=$id";
         if ($con->query($sql) === true) {
-            echo "\nLa tasca amb ID $id ha sigut eliminada.";
+            echo "[OK] La tasca amb ID $id ha sigut eliminada.\n";
         } else {
-            echo "\nError a l'intentar esborrar la tasca";
+            echo "[!] No es pot esborrar la tasca\n";
         }
     } else {
-        echo "\nError : La tasca no existeix (id : $id)";
+        echo "[!] La tasca no existeix (id : $id)\n";
     }
     $con->close();
 }

@@ -7,14 +7,13 @@ if (php_sapi_name() != "cli") {
     die("\nError: Only works on CLI environment\n");
 }
 
+$options = getopt('c:l::f:d:n:r:', ['create:', 'list::', 'finish:', 'remove:', 'name:', 'description:']);
+
 // Verifiquem l'arxiu de configuració
 ensure_config_file();
 
-$options = getopt('c:l::f:d:n:r:', ['create:', 'list::', 'finish:', 'remove:', 'name:', 'description:']);
-
 if (!$config) {
     // Iniciem la configuració del nostre programa [ on enmmagatzenarem les nostres tasques ]
-    echo "\nFalta la configuració\n";
     setup();
     return;
 }
@@ -73,7 +72,7 @@ function showHelp() {
     echo "==================================\n";
     echo "\n";
     echo "-> To CREATE a new task:\n";
-    echo "        -c | --create [task name | string] && -d '[string]' | --description '[task description | string]'\n";
+    echo "        -c | --create [task name | string] -d '[string]' | --description '[task description | string]'\n";
     echo "\n";
     echo "-> To LIST all the tasks:\n";
     echo "        -l | --list\n";

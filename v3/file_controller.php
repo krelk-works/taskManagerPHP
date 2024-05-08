@@ -33,17 +33,22 @@ function ensure_config_file() {
     global $config_file;
     global $config;
     global $errors_data_file;
+    global $tasks_data_file;
     if (file_exists($config_file)) {
         try {
             // Creem una variable temporal per a poder verificar que la configuració esta bé
             $temporal_config = Yaml::parseFile($config_file);
     
-            // Aprofitem i aqui mateix comprovem si les variables que hem agafat del config son valides en cas de ser del tipus MySQL
+            // Aprofitem i aqui mateix comprovem si les variables que hem agafat del config son valides en cas de ser del tipus MySQL o JSON
             if (!empty($temporal_config["storage-type"])) {
                 if ($temporal_config["storage-type"] == "mysql") {
                     if (empty($temporal_config["database"]["host"]) or empty($temporal_config["database"]["user"]) or empty($temporal_config["database"]["db"])){
                         $config = false;
                     } else {
+                        $config = $temporal_config;
+                    }
+                } elseif ($temporal_config["storage-type"] == "json") {
+                    if (file_exists($tasks_data_file)) {
                         $config = $temporal_config;
                     }
                 }
