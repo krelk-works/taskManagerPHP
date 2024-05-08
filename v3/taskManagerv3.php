@@ -1,5 +1,8 @@
 <?php
 
+include_once "sql_connection.php";
+include_once "config_checker.php";
+
 if (php_sapi_name() != "cli") {
     die("\nError: Only works on CLI environment\n");
 }
@@ -7,7 +10,10 @@ if (php_sapi_name() != "cli") {
 $options = getopt('c:l::f:d:n:r:', ['create:', 'list::', 'finish:', 'remove:', 'name:', 'description:']);
 
 if (empty($options)) {
-    showHelp();
+    if (!$config) {
+        echo "No s'ha realitzat la configuració del programa";
+    }
+    //showHelp();
 } else {
     if ((array_key_exists('c', $options) and array_key_exists('d', $options))){
         addTask($options["c"], $options["d"]);
