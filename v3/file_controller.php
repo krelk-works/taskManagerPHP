@@ -23,11 +23,17 @@ if ($os == "WIN") {
 
 // Variables ------------------------------
 $errors_data_file = "data".$DS."errors.yaml";
-$errors = false;
+$errors = [];
 $tasks_data_file = $user_directory.".config".$DS."task-manager.json";
 $config_file = $user_directory.".config".$DS."task-manager.yaml";
-$config = false;
+$config = [];
 // ----------------------------------------
+
+if (file_exists($errors_data_file)) {
+    global $errors;
+    // Asignem el valor dels errors
+    $errors = Yaml::parseFile($errors_data_file);
+}
 
 function ensure_config_file() {
     global $config_file;

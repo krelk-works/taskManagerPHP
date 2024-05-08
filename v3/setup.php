@@ -12,15 +12,15 @@ function setup() {
     global $errors;
 
     // Començem a configurar els paràmetres del nostre programa.
-    echo "\n[WARNING] Falta la configuració del tipus d'emmagatzematge a utilitzar per al programa";
-    echo "\n===================================================";
+    echo "[!] Tens que configurar el programa amb el tipus de enmmagatzematge a utilitzar";
+    echo "\n=============================================================================\n";
     echo "\nSelecciona un tipus d'enmmagatzematge per a fer servir: [1: MySQL | 2:JSON | 3: Cancelar operació]\n";
     $option = readline("Selecció: ");
     
     // Comprovem l'opció inserida per l'usuari
     if ($option != "1" and $option != "2" and $option != "3") {
         //Salt de linia amb missatge d'error
-        //echo "\n", $errors['invalid_save_option'];
+        echo "\n", $errors['invalid_save_option'], "\n";
     } else {
         switch($option){
             case "1":
@@ -74,7 +74,7 @@ function setup() {
                 echo "\n[OK] Configuració desada amb exit.\n";
                 break;
             default:
-                echo "Programa finalitzat";
+                //echo "Programa finalitzat\n";
                 break;
         }
     }

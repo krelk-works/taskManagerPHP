@@ -1,1 +1,2 @@
-invalid_save_option: Opcio de enmmagatzematge no valida!!!
+invalid_save_option: "\n[!] Opcio de enmmagatzematge no valida"
+bbdd_failed_con: "[!] No s'ha pogut establir una connexió amb la base de dades"
