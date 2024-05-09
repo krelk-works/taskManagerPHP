@@ -9,6 +9,10 @@ function saytask($name, $description, $id){
     say("[o] Nom de la tasca: $name");
     say("[o] Descripció: $description");
     line();
+    say("");
 }
+
+function saywarn($text) { echo "[?] $text\n"; };
+function saydie($text) { echo "[!] $text\n"; die(); };
 
 ?>
