@@ -1,4 +1,5 @@
 <?php
+
 function bbdd() {
     global $config;
     if ($config["storage-type"] == "mysql") {
@@ -7,16 +8,15 @@ function bbdd() {
         $pass=$config["database"]["password"];
         $db=$config["database"]["db"];
 
-        //Connection to BBDD
-        $connection=new mysqli($host,$user,$pass,$db);
-
-        //Check connection
-        if ($connection->connect_error) {
-            $connection->close();
-            die("\nFATAL ERROR : Connection failed: " . $connection->connect_error);
-        } else {
+        try {
+            //Connection to BBDD
+            $connection=new mysqli($host,$user,$pass,$db);
+            //Returnem l'objecte de la conexió
             return $connection;
+        } catch (Exception $e) {
+            die("\n[!] No s'ha pogut realitzar la connexió amb la base de dades.\n");
         }
+
     } else {
         die("\nNo es pot utilitzar MySQL si no hi ha una configuració previament.\n");
     }
@@ -33,11 +33,16 @@ function taskExist($id) {
 }
 
 function addTask($taskName, $taskDescription) {
+    if (existTaskName($taskName)) {
+        echo "[!] El nom de la tasca ja existeix\n";
+        return;
+    }
+
     $con = bbdd();
     echo "\n";
 
     if (strlen($taskName) > 30) {
-        echo "Error: Nom de la tasca massa llarg : Maxim 30 caracters\n";
+        echo "[!] Nom de la tasca massa llarg : Maxim 30 caracters\n";
         addTask();
     } else if ($taskName == "c") {
         echo "\n\n";
@@ -45,12 +50,12 @@ function addTask($taskName, $taskDescription) {
     }
 
     if (empty($taskName)) {
-        echo "Error: El nom no pot estar buit\n";
+        echo "[!] El nom no pot estar buit\n";
         addTask();
     }
 
     if (strlen($taskDescription) > 150) {
-        echo "Error: Descripció massa llarga : Maxim 150 caracters\n";
+        echo "[!] Descripció massa llarga : Maxim 150 caracters\n";
         addTask();
     } else if ($taskDescription == "c") {
         echo "\n\n";
@@ -58,7 +63,7 @@ function addTask($taskName, $taskDescription) {
     }
 
     if (empty($taskDescription)) {
-        echo "Error: La descripció no pot estar buida\n";
+        echo "[!] La descripció no pot estar buida\n";
         addTask();
     }
 
@@ -117,5 +122,17 @@ function deleteTask($id) {
         echo "[!] La tasca no existeix (id : $id)\n";
     }
     $con->close();
+}
+
+function existTaskName($name) {
+    $con = bbdd();
+    $search = $con->query('SELECT * FROM tasks');
+    $con->close();
+	while($task=$search->fetch_assoc()){
+        if ($name == $task["name"]) {
+            return true;
+        }
+	}
+    return false;
 }
 ?>

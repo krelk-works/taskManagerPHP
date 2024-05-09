@@ -51,7 +51,7 @@ function json_create_task($name, $description) {
     // Desem el canvis fets
     json_save();
 
-    // 
+    // Missatge de OK
     echo "[OK] Has afegit una nova tasca : $name\n";
 }
 function json_list_all_tasks() {
@@ -72,6 +72,7 @@ function json_remove_task($id) {
     if (array_key_exists($id, $json_data)) {
         array_splice($json_data, $id, 1);
         if (!json_task_exist($id)) {
+            // Missatge de OK
             echo "[OK] Tasca eliminada [$id]\n";
             json_save();
         }
@@ -82,6 +83,7 @@ function json_finish_task($id) {
     if (array_key_exists($id, $json_data)) {
         if ($json_data[$id]["status"] != "Finished") {
             $json_data[$id]["status"] = "Finished";
+            // Missatge de OK
             echo "[OK] Tasca finalitzada [$id]\n";
             json_save();
         } else {
