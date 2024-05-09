@@ -13,6 +13,7 @@ $options = getopt('c:l::f:d:n:r:', ['create:', 'list::', 'finish:', 'remove:', '
 // Verifiquem l'arxiu de configuració
 ensure_config_file();
 
+// Si no hi ha cap configuració feta previament iniciem el setup.
 if (!$config) {
     // Iniciem la configuració del nostre programa [ on enmmagatzenarem les nostres tasques ]
     setup();

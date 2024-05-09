@@ -1,6 +1,7 @@
 <?php
 
 function bbdd() {
+    global $errors;
     global $config;
     if ($config["storage-type"] == "mysql") {
         $host=$config["database"]["host"];
@@ -14,7 +15,7 @@ function bbdd() {
             //Returnem l'objecte de la conexió
             return $connection;
         } catch (Exception $e) {
-            die("\n[!] No s'ha pogut realitzar la connexió amb la base de dades.\n");
+            die($errors["bbdd_failed_con"]);
         }
 
     } else {

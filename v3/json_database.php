@@ -90,8 +90,7 @@ function json_finish_task($id) {
             echo "[!] La tasca ja esta finalitzada [$id]\n";
         }
     }
-}
-    
+} 
 function json_task_exist($id) {
     global $json_data;
     if (array_key_exists($id, $json_data)) {
@@ -100,7 +99,6 @@ function json_task_exist($id) {
         return false;
     }
 }
-
 function json_name_exist($name) {
     global $json_data;
     foreach($json_data as $task) {
@@ -110,7 +108,6 @@ function json_name_exist($name) {
     }
     return false;
 }
-
 function json_save() {
     global $json_data;
     global $tasks_data_file;

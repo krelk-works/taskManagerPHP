@@ -9,7 +9,6 @@ use Symfony\Component\Yaml\Yaml;
 // ----------------------------------------
 
 // Variables d'entorn necessaries ---------
-
 $user_name = getenv("USER");
 $os = strtoupper(substr(PHP_OS, 0, 3)); // WIN o LIN
 $user_directory = false;
@@ -18,13 +17,13 @@ if ($os == "WIN") {
 } elseif ($os == "LIN") {
     $user_directory = $DS."home".$DS.$user_name.$DS;
 }
-
 // ----------------------------------------
 
 // Variables ------------------------------
 $errors_data_file = "data".$DS."errors.yaml";
 $errors = [];
 $tasks_data_file = $user_directory.".config".$DS."task-manager.json";
+$config_directory = $user_directory.".config";
 $json_data = array();
 $config_file = $user_directory.".config".$DS."task-manager.yaml";
 $config = [];
@@ -34,6 +33,11 @@ if (file_exists($errors_data_file)) {
     global $errors;
     // Asignem el valor dels errors
     $errors = Yaml::parseFile($errors_data_file);
+}
+
+if (!file_exists($config_directory)) {
+    // Creem el directory .config en cas que no existeix
+    mkdir($config_directory, 0777, true);
 }
 
 if (file_exists($tasks_data_file)) {
@@ -86,8 +90,6 @@ function ensure_config_file() {
         die("\nError critic : No s'ha pogut localitzar l'arxiu d'informació d'erros. Programa finalitzat\n");
     }
 }
-
-
 function ensure_json_file() {
     global $tasks_data_file;
     if (!file_exists($tasks_data_file)) {
