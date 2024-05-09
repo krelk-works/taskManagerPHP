@@ -1,6 +1,7 @@
 <?php
 
 include_once "sql_connection.php";
+include_once "json_database.php";
 include_once "setup.php";
 
 if (php_sapi_name() != "cli") {
@@ -25,43 +26,43 @@ if (empty($options) and $config) {
         if ($config["storage-type"] == "mysql") {
             addTask($options["c"], $options["d"]);
         } elseif ($config["storage-type"] == "json") {
-
+            json_create_task($options["c"], $options["d"]);
         }
     } elseif ((array_key_exists('create', $options) and array_key_exists('description', $options))) {
         if ($config["storage-type"] == "mysql") {
             addTask($options["create"], $options["description"]);
         } elseif ($config["storage-type"] == "json") {
-
+            json_create_task($options["create"], $options["description"]);
         }
     } elseif (array_key_exists('l', $options) or array_key_exists('list', $options)){
         if ($config["storage-type"] == "mysql") {
             showTasks();
         } elseif ($config["storage-type"] == "json") {
-
+            json_list_all_tasks();
         }
     } elseif (array_key_exists('f', $options)) {
         if ($config["storage-type"] == "mysql") {
             finishTask($options["f"]);
         } elseif ($config["storage-type"] == "json") {
-
+            json_finish_task($options["f"]);
         }
     } elseif(array_key_exists('finish', $options)) {
         if ($config["storage-type"] == "mysql") {
             finishTask($options["finish"]);
         } elseif ($config["storage-type"] == "json") {
-
+            json_finish_task($options["finish"]);
         }
-    } elseif (array_key_exists('r', $options) or array_key_exists('remove', $options)) {
+    } elseif (array_key_exists('r', $options)) {
         if ($config["storage-type"] == "mysql") {
             deleteTask($options["r"]);
         } elseif ($config["storage-type"] == "json") {
-
+            json_remove_task($options["r"]);
         }
     } elseif(array_key_exists('remove', $options)) {
         if ($config["storage-type"] == "mysql") {
             deleteTask($options["remove"]);
         } elseif ($config["storage-type"] == "json") {
-
+            json_remove_task($options["remove"]);
         }
     }
 }

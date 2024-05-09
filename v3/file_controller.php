@@ -25,6 +25,7 @@ if ($os == "WIN") {
 $errors_data_file = "data".$DS."errors.yaml";
 $errors = [];
 $tasks_data_file = $user_directory.".config".$DS."task-manager.json";
+$json_data = array();
 $config_file = $user_directory.".config".$DS."task-manager.yaml";
 $config = [];
 // ----------------------------------------
@@ -33,6 +34,18 @@ if (file_exists($errors_data_file)) {
     global $errors;
     // Asignem el valor dels errors
     $errors = Yaml::parseFile($errors_data_file);
+}
+
+if (file_exists($tasks_data_file)) {
+    global $json_data;
+    try {
+        // Agafem les dades en json
+        $json_encoded = file_get_contents($tasks_data_file);
+        // Formatejem les dades per a que ens retorni un array amb el segon parametre que es "true".
+        $json_data = json_decode($json_encoded, true);
+    } catch (Exception $e) {
+        echo "\nS'ha produit un error en intentar recuperar les dades del json";
+    }
 }
 
 function ensure_config_file() {
