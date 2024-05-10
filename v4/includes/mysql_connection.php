@@ -4,6 +4,11 @@ if (!@check_connection($config["database"]["host"], $config["database"]["user"],
 }
 
 function create_task($name, $description) {
+    // Verifiquem que no tingui escrit caracters especials
+    if (special_chars($name) or special_chars($description)) {
+        saydie(get_message("cant_write_special_characters"));
+    }
+
     if (task_name_exist($name)) {
         saydie(get_message("task_already_exists"));
     }
@@ -17,28 +22,19 @@ function create_task($name, $description) {
     if (strlen($name) > 150) {
         saydie(get_message("desc_too_long"));
     }
-
-    // Netejem el format del text
-    $name_sani = filter_var($name, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    if (filter_var($name_sani, FILTER_SANITIZE_FULL_SPECIAL_CHARS)) {
-        $description_sani = filter_var($description, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if (filter_var($description_sani, FILTER_SANITIZE_FULL_SPECIAL_CHARS)) {
-            $con = get_connection();
-            $insert_query = "INSERT INTO tasks (name, description) VALUES ('$name_sani', '$name_sani')";
-            if ($con->query($insert_query) === true) {
-                // Missatge de OK
-                sayok(get_message("new_task_added").$name_sani);
-            } else {
-                // Missatge NO OK
-                saydie(get_message("cant_create_new_task"));
-            }
-            $con->close();
-        } else {
-            saydie(get_message("description_invalid"));
-        }
+   
+    $con = get_connection();
+    $insert_query = "INSERT INTO tasks (name, description) VALUES ('$name', '$description')";
+    if ($con->query($insert_query) === true) {
+        // Missatge de OK
+        
+        sayok(get_message("new_task_added").$name);
     } else {
-        saydie(get_message("task_name_invalid"));
+        // Missatge NO OK
+        saydie(get_message("cant_create_new_task"));
     }
+    $con->close();
+        
 }
 
 function list_tasks() {

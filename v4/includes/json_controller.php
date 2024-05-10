@@ -1,10 +1,4 @@
 <?php
-
-// Verifiquem que la nostra configuració esta amb JSON
-if ($config["storage-type"] != "json" or $config == null) {
-    return;
-}
-
 // Variables
 $tasks_data_file = $user_directory.".config".DIRECTORY_SEPARATOR."task-manager.json";
 $json_tasks = array();
@@ -28,6 +22,12 @@ if(!file_exists($tasks_data_file)) {
 
 // Funcions
 function create_task($name, $description) {
+    // Verifiquem que no tingui escrit caracters especials
+    if (special_chars($name) or special_chars($description)) {
+        saydie(get_message("cant_write_special_characters"));
+    }
+
+    // Comprovem si la tasca existeix al JSON
     if (task_name_exist($name)) {
         saydie(get_message("task_already_exists"));
     }
@@ -44,25 +44,14 @@ function create_task($name, $description) {
         saydie(get_message("desc_too_long"));
     }
 
-    // Netejem el format del text
-    $name_sani = filter_var($name, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    if (filter_var($name_sani, FILTER_SANITIZE_FULL_SPECIAL_CHARS)) {
-        $description_sani = filter_var($description, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if (filter_var($description_sani, FILTER_SANITIZE_FULL_SPECIAL_CHARS)) {
-            // Afegim el nou element a la nostra variable de tasques.
-            array_push($json_tasks, ["name" => $name_sani, "description" => $description, "status" => "No finalitzada"]);
+    // Afegim el nou element a la nostra variable de tasques.
+    array_push($json_tasks, ["name" => $name, "description" => $description, "status" => "No finalitzada"]);
 
-            // Missatge de OK
-            sayok(get_message("new_task_added").$name_sani);
+    // Missatge de OK
+    sayok(get_message("new_task_added").$name);
 
-            // Desem el canvis fets
-            json_save();
-        } else {
-            saydie(get_message("description_invalid"));
-        }
-    } else {
-        saydie(get_message("task_name_invalid"));
-    }
+    // Desem el canvis fets al JSON
+    json_save();
 }
 
 function list_tasks() {
