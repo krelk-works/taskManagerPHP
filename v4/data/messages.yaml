@@ -1,0 +1,24 @@
+test_error: Aquest es un error de prova.
+tipus_enmm_no_valid: Has inserit un tipus de enmmagatzematge erroni, torna-ho a provar.
+mysql_connection_error: No s'ha pogut establir una connexió amb la base de dades, prova-ho un altre cop.
+write_config_ok: S'ha desat correctament la configuració.
+exit_app: Has sortit de la app.
+database_connection: "Introdueix les dades de connexió:"
+only_works_on_cli: Aquesta aplicació només funciona en CLI.
+error_config_file: Error inesperat a l'arxiu de configuració.
+invalid_amount_param: Quantitat de paràmetres no valida.
+invalid_parameters: Paràmetres invalids o no inserits. Utilitzeu -h o --help per veure la ajuda.
+json_file_error_open: Error al obrir l'arxiu de JSON.
+task_already_exists: El nom de la tasca ja existeix.
+task_name_too_long: "Nom de la tasca massa llarg (maxim 30 caracters)."
+empty_task_name: El nom de la tasca no pot estar buit.
+desc_too_long: Descripció massa llarga (maxim 150 caracters).
+empty_task_desc: La descripció de la tasca no pot estar buida.
+new_task_added: "Has afegit una nova tasca: "
+task_name_or_desc_empty: Has deixat en blanc el nom de la tasca o la seva descripció.
+empty_id: S'ha rebut una ID buida o no valida.
+deleted_task: "Tasca eliminada: "
+task_done: "Tasca finalitzada: "
+task_already_done: "La tasca ja està finalitzada: "
+no_tasks: No hi ha tasques pendents.
+task_not_found: "No s'ha trobat la tasca amb ID: "
