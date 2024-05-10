@@ -1,6 +1,7 @@
 test_error: Aquest es un error de prova.
 tipus_enmm_no_valid: Has inserit un tipus de enmmagatzematge erroni, torna-ho a provar.
 mysql_connection_error: No s'ha pogut establir una connexió amb la base de dades, prova-ho un altre cop.
+mysql_not_connect: No s'ha pogut establir la connexió amb la base de dades.
 write_config_ok: S'ha desat correctament la configuració.
 exit_app: Has sortit de la app.
 database_connection: "Introdueix les dades de connexió:"

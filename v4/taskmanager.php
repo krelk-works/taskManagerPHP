@@ -4,8 +4,12 @@ include_once("includes/extras.php");
 include_once("includes/messages.php");
 include_once("includes/setup.php");
 include_once("includes/config_initializer.php");
-include_once("includes/mysql_connection.php");
-include_once("includes/json_controller.php");
+
+if ($config != null) {
+    if ($config["storage-type"] == "mysql") { include_once("includes/mysql_connection.php"); }
+    if ($config["storage-type"] == "json") { include_once("includes/json_controller.php"); }
+}
+
 include_once("includes/cli_interpreter.php");
 
 if (php_sapi_name() != "cli") {
