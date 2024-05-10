@@ -1,10 +1,4 @@
 <?php
-
-// Verifiquem que la nostra configuració esta amb MySQL
-if ($config["storage-type"] != "mysql" or $config == null) {
-    return;
-}
-
 if (!@check_connection($config["database"]["host"], $config["database"]["user"], $config["database"]["password"], $config["database"]["db"])){
     saydie(get_message("mysql_not_connect"));
 }
@@ -29,7 +23,16 @@ function create_task($name, $description) {
     if (filter_var($name_sani, FILTER_SANITIZE_FULL_SPECIAL_CHARS)) {
         $description_sani = filter_var($description, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         if (filter_var($description_sani, FILTER_SANITIZE_FULL_SPECIAL_CHARS)) {
-            
+            $con = get_connection();
+            $insert_query = "INSERT INTO tasks (name, description) VALUES ('$name_sani', '$name_sani')";
+            if ($con->query($insert_query) === true) {
+                // Missatge de OK
+                sayok(get_message("new_task_added").$name_sani);
+            } else {
+                // Missatge NO OK
+                saydie(get_message("cant_create_new_task"));
+            }
+            $con->close();
         } else {
             saydie(get_message("description_invalid"));
         }
@@ -48,11 +51,33 @@ function list_tasks() {
 }
 
 function remove_task($id) {
-    
+    $con=get_connection();
+    if (task_exist($id)) {
+        $sql = "DELETE FROM tasks WHERE id=$id";
+        if ($con->query($sql) === true) {
+            sayok(get_message("deleted_task").$id);
+        } else {
+            saydie(get_message("task_cant_be_removed"));
+        }
+    } else {
+        saydie(get_message("task_not_found").$id);
+    }
+    $con->close();
 }
 
 function finish_task($id) {
-    
+    $con=get_connection();
+    if (task_exist($id)) {
+        $sql = "UPDATE tasks SET status='Finalitzada' WHERE id=$id";
+        if ($con->query($sql) === true) {
+            sayok(get_message("task_done").$id);
+        } else {
+            saydie(get_message("task_cant_make_done"));
+        }
+    } else {
+        saydie(get_message("task_not_found").$id);
+    }
+    $con->close();
 }
 
 
@@ -66,6 +91,16 @@ function task_name_exist($name) {
     } else {
         return false;
     }
+}
+
+function task_exist($id) {
+    $con = get_connection();
+    $query=$con->query("SELECT id FROM tasks WHERE id = '$id' LIMIT 1");
+    $con->close();
+    if ($query->num_rows > 0) {
+        return true;
+    }
+    return false;
 }
 
 function get_connection() {
