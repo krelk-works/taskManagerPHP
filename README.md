@@ -24,7 +24,7 @@ Este es un sencillo gestor de tareas desarrollado en PHP que te permite administ
 ## Uso
 
 1. Abre tu terminal y navega hasta la carpeta del proyecto.
-2. Ejecuta el archivo `task-manager.php` para iniciar la aplicación.
+2. Ejecuta el archivo `taskmanager.php` para iniciar la aplicación.
 3. Sigue las instrucciones en pantalla para agregar, marcar como completadas, listar o eliminar tareas.
 
 ```bash
