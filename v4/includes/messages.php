@@ -23,10 +23,10 @@ try {
     global $messages;
     $messages = Yaml::parseFile($messages_file);
     if ($messages == null) {
-        saywarn("No hi han dades d'informació d'errors a l'arxiu d'errors.");
+        saywarn("No hi han dades d'informació de missatges.");
     }
 } catch (Exception $e) {
-    saydie("S'ha produït un error al intent de apertura de l'arxiu YAML d'errors.");
+    saydie("S'ha produït un error al intent de apertura de l'arxiu YAML de missatges.");
 }
 
 function get_message($id) {
@@ -38,9 +38,5 @@ function get_message($id) {
     }
     return "Missatge no identificat";
 }
-
-// Proves d'errors
-//sayerror(get_message("test_error"));
-
 
 ?>

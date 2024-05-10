@@ -1,7 +1,6 @@
 <?php
 
 function intelliexec($options) {
-    //var_dump($options);
     if ((array_key_exists('c', $options) or array_key_exists('create', $options)) and (array_key_exists('d', $options) or array_key_exists('description', $options))
     and !array_key_exists('r', $options) and !array_key_exists('remove', $options) and !array_key_exists('f', $options) and !array_key_exists('finish', $options)) {
         if (!(array_key_exists('c', $options) and array_key_exists('create', $options))) {

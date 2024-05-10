@@ -90,7 +90,6 @@ function setup() {
                 sayok(get_message("write_config_ok"));
                 break;
             default:
-                //echo "Programa finalitzat\n";
                 saymsg(get_message("exit_app"));
                 break;
         }
