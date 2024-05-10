@@ -22,3 +22,5 @@ task_done: "Tasca finalitzada: "
 task_already_done: "La tasca ja està finalitzada: "
 no_tasks: No hi ha tasques pendents.
 task_not_found: "No s'ha trobat la tasca amb ID: "
+task_name_invalid: El nom de la tasca no es valid, no es permet caracters especials.
+description_invalid: La descripció de la tasca no pot tenir caracters especials.

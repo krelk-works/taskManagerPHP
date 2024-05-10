@@ -44,14 +44,25 @@ function create_task($name, $description) {
         saydie(get_message("desc_too_long"));
     }
 
-    // Afegim el nou element a la nostra variable de tasques.
-    array_push($json_tasks, ["name" => $name, "description" => $description, "status" => "No finalitzada"]);
+    // Netejem el format del text
+    $name_sani = filter_var($name, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    if (filter_var($name_sani, FILTER_SANITIZE_FULL_SPECIAL_CHARS)) {
+        $description_sani = filter_var($description, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (filter_var($description_sani, FILTER_SANITIZE_FULL_SPECIAL_CHARS)) {
+            // Afegim el nou element a la nostra variable de tasques.
+            array_push($json_tasks, ["name" => $name_sani, "description" => $description, "status" => "No finalitzada"]);
 
-    // Missatge de OK
-    sayok(get_message("new_task_added").$name);
+            // Missatge de OK
+            sayok(get_message("new_task_added").$name_sani);
 
-    // Desem el canvis fets
-    json_save();
+            // Desem el canvis fets
+            json_save();
+        } else {
+            saydie(get_message("description_invalid"));
+        }
+    } else {
+        saydie(get_message("task_name_invalid"));
+    }
 }
 
 function list_tasks() {
