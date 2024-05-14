@@ -18,6 +18,7 @@ function saymsg($text) { echo "[o] $text\n"; };
 
 function sayerror($text) { echo "[!] $text\n"; };
 function sayok($text) { echo "[OK] $text\n"; }
+function sayokdie($text) { echo "[OK] $text\n"; die(); }
 function saysintax() {
     line();
     say("Aqui teniu la forma de poder utilitzar la aplicació de taskmanager v4.");

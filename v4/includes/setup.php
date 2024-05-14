@@ -67,8 +67,7 @@ function setup() {
                     // Inserim les dades en format Yaml al nostre arxiu de configuració
                     file_put_contents($config_file, $new_config);
                     // ----------------------------------------------------------------
-                    sayok(get_message("write_config_ok"));
-                    saydie("Programa finalitzat, torna-ho a executar per poder realitzar accions.");
+                    sayokdie(get_message("write_config_ok"));
                 } else {
                     // En cas que no funcioni la conexió amb la base de dades tornem a llançar el setup() per a que l'usuari torni a posar dades.
                     sayerror(get_message("mysql_connection_error"));
