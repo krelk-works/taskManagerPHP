@@ -28,4 +28,4 @@ task_cant_be_removed: No s'ha pogut eliminar la tasca.
 task_name_invalid: El nom de la tasca no es valid, no es permet caracters especials.
 description_invalid: La descripció de la tasca no pot tenir caracters especials.
 cant_create_new_task: Hi ha hagut un error al fer l'intent de crear una nova tasca.
-cant_write_special_characters: No pots utilitzar caracters especials al nom o descripcio de la tasca.
+cant_write_special_characters: No pots utilitzar caracters especials al nom o descripcio de la tasca o espais en blanc al final del text.

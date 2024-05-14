@@ -40,9 +40,14 @@ function create_task($name, $description) {
 function list_tasks() {
     $con = get_connection();
     $search = $con->query('SELECT * FROM tasks');
+    $count = 0;
 	while($task=$search->fetch_assoc()){
 	    saytask($task["name"], $task["description"], $task["id"], $task["status"]);
+        $count++;
 	}
+    if ($count == 0) {
+        saydie(get_message("no_tasks"));
+    }
     $con->close();
 }
 
