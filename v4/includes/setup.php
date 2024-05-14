@@ -87,7 +87,7 @@ function setup() {
                 // Desem el diccionari en format YAML a l'arxiu de configuració
                 file_put_contents($config_file, $new_config);
                 // ----------------------------------------------------------------
-                sayok(get_message("write_config_ok"));
+                sayokdie(get_message("write_config_ok"));
                 break;
             default:
                 saymsg(get_message("exit_app"));
