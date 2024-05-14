@@ -68,6 +68,7 @@ function setup() {
                     file_put_contents($config_file, $new_config);
                     // ----------------------------------------------------------------
                     sayok(get_message("write_config_ok"));
+                    saydie("Programa finalitzat, torna-ho a executar per poder realitzar accions.");
                 } else {
                     // En cas que no funcioni la conexió amb la base de dades tornem a llançar el setup() per a que l'usuari torni a posar dades.
                     sayerror(get_message("mysql_connection_error"));
